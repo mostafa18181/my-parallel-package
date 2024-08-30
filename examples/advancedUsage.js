@@ -1,19 +1,37 @@
-// Advanced usage example
-const AdvancedAPI = require('./advancedAPI');
+// Advanced usage example for AdvancedAPI
+/**
+ * Description:
+ * This file provides an advanced usage example of the AdvancedAPI,
+ * which is designed to manage complex and advanced tasks in a Node.js environment.
+ * The AdvancedAPI allows you to execute tasks concurrently using multiple threads
+ * and processes. It includes features for error handling, task prioritization,
+ * runtime configuration adjustments, and resource cleanup.
+ *
+ * Purpose of the File:
+ * - Configure advanced settings for managing heavy computational and I/O tasks.
+ * - Define and handle complex tasks.
+ * - Add tasks to a queue and execute them concurrently with various settings.
+ * - Monitor the status of the task queue.
+ * - Dynamically adjust API settings during runtime.
+ * - Terminate the API and clean up resources.
+ */
 
-// 1. تنظیمات پیشرفته
+const AdvancedAPI = require('../src/api/advancedAPI');
+
+// 1. Advanced configuration settings
 const options = {
-    logLevel: 'debug',  // ثبت لاگ‌ها در سطح دیباگ برای بررسی دقیق‌تر
-    maxThreads: 8,      // استفاده از 8 نخ برای پردازش‌های سنگین
-    maxProcesses: 4,    // استفاده از 4 فرآیند برای پردازش‌های مستقل
+    logLevel: 'debug',  // Logging level set to debug for detailed insights
+    maxThreads: 8,      // Using 8 threads for heavy computations
+    maxProcesses: 4,    // Using 4 processes for independent tasks
     queueOptions: {
-        maxRetries: 3,  // تلاش مجدد برای وظایف در صورت بروز خطا
+        maxRetries: 3,  // Retry tasks up to 3 times in case of errors
     },
 };
 
+// Initialize the AdvancedAPI with the specified options
 const api = new AdvancedAPI(options);
 
-// 2. تعریف وظایف پیچیده و پیشرفته
+// 2. Define complex and advanced tasks
 function heavyComputation(input) {
     console.log('Running heavy computation task with input:', input);
     return input.reduce((acc, val) => acc + Math.pow(val, 2), 0);
@@ -43,24 +61,24 @@ function processTask(task) {
     }
 }
 
-// 3. افزودن وظایف پیشرفته به صف
+// 3. Add advanced tasks to the queue
 api.addTask({type: 'compute', action: 'heavyComputation', data: [10, 20, 30, 40]});
 api.addTask({type: 'io', action: 'complexDataFetch', data: 'https://jsonplaceholder.typicode.com/posts'});
 
-// 4. اجرای همزمان چندین وظیفه با اولویت‌بندی
+// 4. Execute multiple tasks concurrently with priority settings
 api.executeTask({useThreads: true, priority: 'high'});
 api.executeTask({useThreads: false, priority: 'low'});
 
-// 5. پیگیری وضعیت صف و بررسی نتایج
+// 5. Check the queue status and review results
 console.log('Queue Status:', api.getQueueStatus());
 
-// 6. اعمال تغییرات در تنظیمات در زمان اجرا
-api.configureThreads({maxThreads: 12});  // افزایش تعداد نخ‌ها برای پردازش‌های سنگین‌تر
-api.configureProcesses({maxProcesses: 6});  // افزایش تعداد فرآیندها برای پردازش‌های I/O سنگین
+// 6. Adjust settings dynamically during runtime
+api.configureThreads({maxThreads: 12});  // Increase the number of threads for heavier tasks
+api.configureProcesses({maxProcesses: 6});  // Increase the number of processes for I/O intensive tasks
 
-// 7. افزودن وظایف بیشتر پس از تغییرات
+// 7. Add more tasks after configuration changes
 api.addTask({type: 'compute', action: 'heavyComputation', data: [50, 60, 70, 80]});
 api.executeTask({useThreads: true});
 
-// 8. خاتمه دادن و پاکسازی منابع
+// 8. Shut down and clean up resources
 api.shutdown();
